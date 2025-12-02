@@ -70,14 +70,14 @@ jobs:
           
           # Tìm tag/release gần nhất từ các build thành công (tag pattern: build-*)
           LAST_TAG=""
-          if git tag -l "build-*" | sort -V | tail -1 >/dev/null 2>&1; then
-            LAST_TAG=$(git tag -l "build-*" | sort -V | tail -1)
+          BUILD_TAGS=$(git tag -l "build-*" 2>/dev/null || true)
+          
+          if [ -n "$BUILD_TAGS" ]; then
+            # Sắp xếp tags theo số và lấy tag lớn nhất (build gần nhất)
+            LAST_TAG=$(echo "$BUILD_TAGS" | sed 's/build-//' | sort -n | tail -1 | sed 's/^/build-/')
             echo "Found last successful build tag: ${LAST_TAG}" >&2
-          elif git describe --tags --abbrev=0 >/dev/null 2>&1; then
-            LAST_TAG=$(git describe --tags --abbrev=0)
-            echo "Found last tag (non-build): ${LAST_TAG}" >&2
           else
-            echo "No tags found, will include all commits" >&2
+            echo "No build tags found, will include all commits" >&2
           fi
           
           # Tạo file changelog với format đẹp giống GitHub Releases
@@ -85,40 +85,40 @@ jobs:
             echo "## Changelog ($(date -u +"%Y-%m-%d %H:%M:%S") UTC)"
             echo ""
             
-            # Lấy commit từ tag gần nhất đến HEAD (nếu có tag)
-            # Nếu không có tag, lấy tất cả commit
+            # Chỉ lấy commit từ tag build gần nhất đến HEAD (nếu có tag build)
             if [ -n "$LAST_TAG" ]; then
               COMMIT_RANGE="${LAST_TAG}..HEAD"
               echo "Getting commits from ${LAST_TAG} to HEAD" >&2
               
               # Kiểm tra xem có commit nào không
-              if git log "${COMMIT_RANGE}" --oneline 2>/dev/null | head -1 >/dev/null 2>&1; then
+              COMMITS=$(git log "${COMMIT_RANGE}" --no-merges --oneline 2>/dev/null || true)
+              if [ -n "$COMMITS" ]; then
                 git log "${COMMIT_RANGE}" --no-merges --pretty=format:"*   **%s** (%h)"
               else
                 echo "- No new commits since ${LAST_TAG}"
               fi
             else
-              echo "### All Commits (no previous release found)"
+              echo "### All Commits (no previous successful build found)"
               echo ""
-              git log --no-merges --pretty=format:"*   **%s** (%h)"
+              git log --no-merges --pretty=format:"*   **%s** (%h)" | head -20
             fi
             
           } > release_notes.md
           
-          # Fallback cuối cùng nếu file rỗng
+          # Fallback cuối cùng nếu file rỗng hoặc không có commit nào
           if [ ! -s release_notes.md ] || ! grep -q "^\*" release_notes.md; then
             {
               echo "## Changelog ($(date -u +"%Y-%m-%d %H:%M:%S") UTC)"
               echo ""
               echo "### Recent Changes"
               echo ""
-              git log -n 50 --no-merges --pretty=format:"*   **%s** (%h)" 2>/dev/null || echo "- No commits found."
+              git log -n 10 --no-merges --pretty=format:"*   **%s** (%h)" 2>/dev/null || echo "- No commits found."
             } > release_notes.md
           fi
           
           # Hiển thị preview
-          echo "=== Changelog Preview (first 50 lines) ==="
-          head -50 release_notes.md
+          echo "=== Changelog Preview (first 30 lines) ==="
+          head -30 release_notes.md
           echo ""
           echo "=== Total lines in changelog ==="
           wc -l release_notes.md || echo "0"
