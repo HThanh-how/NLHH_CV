@@ -68,11 +68,14 @@ jobs:
         run: |
           set -euo pipefail
           
-          # Tìm tag/release gần nhất (debug info ra stderr, không vào file)
+          # Tìm tag/release gần nhất từ các build thành công (tag pattern: build-*)
           LAST_TAG=""
-          if git describe --tags --abbrev=0 >/dev/null 2>&1; then
+          if git tag -l "build-*" | sort -V | tail -1 >/dev/null 2>&1; then
+            LAST_TAG=$(git tag -l "build-*" | sort -V | tail -1)
+            echo "Found last successful build tag: ${LAST_TAG}" >&2
+          elif git describe --tags --abbrev=0 >/dev/null 2>&1; then
             LAST_TAG=$(git describe --tags --abbrev=0)
-            echo "Found last tag: ${LAST_TAG}" >&2
+            echo "Found last tag (non-build): ${LAST_TAG}" >&2
           else
             echo "No tags found, will include all commits" >&2
           fi
