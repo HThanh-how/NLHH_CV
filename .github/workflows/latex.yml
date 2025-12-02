@@ -1,0 +1,135 @@
+name: Build LaTeX PDF - Resume
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-pdf:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Diagnose
+        run: |
+          echo "Triggered on $GITHUB_REF@${GITHUB_SHA}"
+          ls -la || true
+
+      - name: Compile LaTeX (XeLaTeX)
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: main.tex
+          latexmk_use_xelatex: true
+          latexmk_shell_escape: true
+          extra_system_packages: |
+          pre_compile: |
+            tlmgr update --self
+            tlmgr install fontawesome5 fontspec lm babel-english
+
+      - name: Publish PDF to project root
+        run: |
+          cp main.pdf Nguyen_Luong_Huu_Huy_Resume.pdf
+          ls -la
+
+      - name: Upload artifact (PDF)
+        uses: actions/upload-artifact@v4
+        with:
+          name: resume-pdf
+          path: Nguyen_Luong_Huu_Huy_Resume.pdf
+
+      - name: Upload logs (always)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: resume-logs
+          path: |
+            main.log
+            main.aux
+            main.toc
+            main.lof
+            main.lot
+
+  release:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    needs: build-pdf
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Generate changelog from commit history
+        run: |
+          set -euo pipefail
+          
+          # Tìm tag/release gần nhất (debug info ra stderr, không vào file)
+          LAST_TAG=""
+          if git describe --tags --abbrev=0 >/dev/null 2>&1; then
+            LAST_TAG=$(git describe --tags --abbrev=0)
+            echo "Found last tag: ${LAST_TAG}" >&2
+          else
+            echo "No tags found, will include all commits" >&2
+          fi
+          
+          # Tạo file changelog với format đẹp giống GitHub Releases
+          {
+            echo "## Changelog ($(date -u +"%Y-%m-%d %H:%M:%S") UTC)"
+            echo ""
+            
+            # Lấy commit từ tag gần nhất đến HEAD (nếu có tag)
+            # Nếu không có tag, lấy tất cả commit
+            if [ -n "$LAST_TAG" ]; then
+              COMMIT_RANGE="${LAST_TAG}..HEAD"
+              echo "Getting commits from ${LAST_TAG} to HEAD" >&2
+              
+              # Kiểm tra xem có commit nào không
+              if git log "${COMMIT_RANGE}" --oneline 2>/dev/null | head -1 >/dev/null 2>&1; then
+                git log "${COMMIT_RANGE}" --no-merges --pretty=format:"*   **%s** (%h)"
+              else
+                echo "- No new commits since ${LAST_TAG}"
+              fi
+            else
+              echo "### All Commits (no previous release found)"
+              echo ""
+              git log --no-merges --pretty=format:"*   **%s** (%h)"
+            fi
+            
+          } > release_notes.md
+          
+          # Fallback cuối cùng nếu file rỗng
+          if [ ! -s release_notes.md ] || ! grep -q "^\*" release_notes.md; then
+            {
+              echo "## Changelog ($(date -u +"%Y-%m-%d %H:%M:%S") UTC)"
+              echo ""
+              echo "### Recent Changes"
+              echo ""
+              git log -n 50 --no-merges --pretty=format:"*   **%s** (%h)" 2>/dev/null || echo "- No commits found."
+            } > release_notes.md
+          fi
+          
+          # Hiển thị preview
+          echo "=== Changelog Preview (first 50 lines) ==="
+          head -50 release_notes.md
+          echo ""
+          echo "=== Total lines in changelog ==="
+          wc -l release_notes.md || echo "0"
+      
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: resume-pdf
+          path: dist
+      
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: build-${{ github.run_number }}
+          name: Automated Build ${{ github.run_number }}
+          body_path: release_notes.md
+          files: dist/Nguyen_Luong_Huu_Huy_Resume.pdf
