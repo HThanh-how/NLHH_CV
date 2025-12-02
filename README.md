@@ -9,7 +9,7 @@
 
 **Professional LaTeX-based resume with automated PDF generation**
 
-[📥 Download Latest PDF](https://github.com/HuyBK0408/NLHH/releases/latest) • [🔧 Workflow Details](.github/workflows/README.md)
+[📥 Download Latest PDF](releases/latest) • [🔧 Workflow Details](.github/workflows/README.md)
 
 </div>
 
