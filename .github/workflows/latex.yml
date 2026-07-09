@@ -1,4 +1,4 @@
-name: Build LaTeX PDF - Resume
+name: Build LaTeX PDFs - Resume
 
 on:
   push:
@@ -11,6 +11,16 @@ permissions:
 jobs:
   build-pdf:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - root_file: main.tex
+            pdf_name: Nguyen_Luong_Huu_Huy_Resume_EN.pdf
+            artifact_name: resume-en-pdf
+          - root_file: cv-bilingual.tex
+            pdf_name: Nguyen_Luong_Huu_Huy_Resume_Bilingual.pdf
+            artifact_name: resume-bilingual-pdf
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -18,44 +28,49 @@ jobs:
       - name: Diagnose
         run: |
           echo "Triggered on $GITHUB_REF@${GITHUB_SHA}"
+          echo "Building ${{ matrix.root_file }} -> ${{ matrix.pdf_name }}"
           ls -la || true
 
       - name: Compile LaTeX (XeLaTeX)
         uses: xu-cheng/latex-action@v3
         with:
-          root_file: main.tex
+          root_file: ${{ matrix.root_file }}
           latexmk_use_xelatex: true
           latexmk_shell_escape: true
           extra_system_packages: |
+            fonts-dejavu-core
           pre_compile: |
             tlmgr update --self
-            tlmgr install fontawesome5 fontspec lm babel-english
+            tlmgr install fontawesome5 fontspec lm babel-english etoolbox
 
       - name: Publish PDF to project root
         run: |
-          cp main.pdf Nguyen_Luong_Huu_Huy_Resume.pdf
+          cp "${{ matrix.root_file }}" source.tex
+          PDF_FILE="${{ matrix.root_file }}"
+          PDF_FILE="${PDF_FILE%.tex}.pdf"
+          cp "$PDF_FILE" "${{ matrix.pdf_name }}"
           ls -la
 
       - name: Upload artifact (PDF)
         uses: actions/upload-artifact@v4
         with:
-          name: resume-pdf
-          path: Nguyen_Luong_Huu_Huy_Resume.pdf
+          name: ${{ matrix.artifact_name }}
+          path: ${{ matrix.pdf_name }}
 
       - name: Upload logs (always)
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: resume-logs
+          name: ${{ matrix.artifact_name }}-logs
           path: |
-            main.log
-            main.aux
-            main.toc
-            main.lof
-            main.lot
+            *.log
+            *.aux
+            *.toc
+            *.lof
+            *.lot
 
   release:
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     needs: build-pdf
     steps:
@@ -123,11 +138,20 @@ jobs:
           echo "=== Total lines in changelog ==="
           wc -l release_notes.md || echo "0"
       
-      - name: Download artifact
+      - name: Download English PDF
         uses: actions/download-artifact@v4
         with:
-          name: resume-pdf
+          name: resume-en-pdf
           path: dist
+
+      - name: Download bilingual PDF
+        uses: actions/download-artifact@v4
+        with:
+          name: resume-bilingual-pdf
+          path: dist
+
+      - name: List release assets
+        run: ls -la dist
       
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -135,4 +159,6 @@ jobs:
           tag_name: build-${{ github.run_number }}
           name: Automated Build ${{ github.run_number }}
           body_path: release_notes.md
-          files: dist/Nguyen_Luong_Huu_Huy_Resume.pdf
+          files: |
+            dist/Nguyen_Luong_Huu_Huy_Resume_EN.pdf
+            dist/Nguyen_Luong_Huu_Huy_Resume_Bilingual.pdf

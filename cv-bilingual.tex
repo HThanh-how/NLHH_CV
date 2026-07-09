@@ -1,0 +1,257 @@
+\documentclass[10pt, letterpaper]{article}
+
+\usepackage[
+    ignoreheadfoot,
+    top=1.65cm,
+    bottom=1.65cm,
+    left=1.65cm,
+    right=1.65cm,
+    footskip=0.8cm,
+]{geometry}
+\usepackage{titlesec}
+\usepackage[dvipsnames]{xcolor}
+\definecolor{primaryColor}{RGB}{0, 79, 144}
+\usepackage{enumitem}
+\usepackage{fontawesome5}
+\usepackage{amsmath}
+\usepackage[
+    pdftitle={NGUYEN LUONG HUU HUY's Bilingual CV},
+    pdfauthor={NGUYEN LUONG HUU HUY},
+    pdfcreator={LaTeX},
+    colorlinks=true,
+    urlcolor=primaryColor,
+    linkcolor=primaryColor,
+    hidelinks
+]{hyperref}
+\usepackage{calc}
+\usepackage{bookmark}
+\usepackage{changepage}
+\usepackage{paracol}
+\usepackage{ifthen}
+\usepackage{etoolbox}
+\usepackage{needspace}
+\usepackage{iftex}
+
+\ifPDFTeX
+    \usepackage[utf8]{inputenc}
+    \usepackage[T1]{fontenc}
+    \usepackage{lmodern}
+    \input{glyphtounicode}
+    \pdfgentounicode=1
+\else
+    \usepackage{fontspec}
+    \IfFontExistsTF{Times New Roman}{
+        \setmainfont{Times New Roman}
+    }{
+        \IfFontExistsTF{DejaVu Serif}{
+            \setmainfont{DejaVu Serif}
+        }{
+            \setmainfont{Latin Modern Roman}
+        }
+    }
+\fi
+
+\AtBeginEnvironment{adjustwidth}{\partopsep0pt}
+\pagestyle{empty}
+\setcounter{secnumdepth}{0}
+\setlength{\parindent}{0pt}
+\setlength{\topskip}{0pt}
+\setlength{\columnsep}{0cm}
+
+\titleformat{\section}{\needspace{3\baselineskip}\bfseries\large}{}{0pt}{}[\vspace{1pt}\titlerule]
+\titlespacing{\section}{-1pt}{0.26cm}{0.12cm}
+
+\renewcommand\labelitemi{$\circ$}
+\newenvironment{highlights}{
+    \begin{itemize}[
+        topsep=0.06cm,
+        parsep=0.03cm,
+        partopsep=0pt,
+        itemsep=0.04cm,
+        leftmargin=0.36cm + 10pt
+    ]
+}{
+    \end{itemize}
+}
+
+\setlist[itemize,2]{
+    label=\textbullet,
+    leftmargin=1em,
+    topsep=0.04cm,
+    partopsep=0pt,
+    parsep=0.03cm,
+    itemsep=0.03cm
+}
+
+\newenvironment{onecolentry}{
+    \begin{adjustwidth}{0.12cm}{0.12cm}
+}{
+    \end{adjustwidth}
+}
+
+\newenvironment{twocolentry}[2][]{
+    \onecolentry
+    \def\secondColumnText{#2}
+    \setcolumnwidth{\fill, 4.7cm}
+    \begin{paracol}{2}
+    \ifblank{#1}{}{\textbf{#1}\\}
+}{
+    \switchcolumn \raggedleft \textit{\secondColumnText}
+    \end{paracol}
+    \endonecolentry
+}
+
+\newenvironment{header}{
+    \setlength{\topsep}{0pt}\par\kern\topsep\centering\linespread{1.05}
+}{
+    \par\kern\topsep
+}
+
+\let\RealHref\href
+\renewcommand{\href}[2]{\RealHref{#1}{\textcolor{primaryColor}{#2}}}
+\newcommand{\headerlink}[2]{\RealHref{#1}{\textcolor{black}{#2}}}
+\newcommand{\bilingual}[2]{#1 \textit{/ #2}}
+
+\begin{document}
+\pagestyle{empty}
+
+\begin{header}
+    \textbf{\fontsize{23pt}{23pt}\selectfont NGUYEN LUONG HUU HUY}
+
+    \vspace{0.08cm}
+    \normalsize\textit{\bilingual{Embedded Systems / Physical Design Engineer}{Kỹ sư Hệ thống Nhúng / Thiết kế Vật lý}}
+
+    \vspace{0.12cm}
+
+    \normalsize
+    Ho Chi Minh City, Viet Nam \\[0.04cm]
+    \mbox{\color{black}\footnotesize\faPhone*}\hspace*{0.13cm}0946790659
+    \kern 0.25cm
+    \mbox{\color{black}\footnotesize\faEnvelope[regular]}\hspace*{0.13cm}\headerlink{mailto:nguyenhuuhuybe@gmail.com}{nguyenhuuhuybe@gmail.com} \\[0.08cm]
+    \mbox{\color{black}\footnotesize\faLinkedin}\hspace*{0.13cm}\headerlink{https://www.linkedin.com/in/huy-nguyen-luong-huu-huu}{linkedin.com/in/huy-nguyen-luong-huu-huu}
+    \kern 0.25cm
+    \mbox{\color{black}\footnotesize\faGithub}\hspace*{0.13cm}\headerlink{https://github.com/HuyBK0408}{github.com/HuyBK0408}
+\end{header}
+
+\vspace{0.18cm}
+
+\section{ABOUT ME / GIỚI THIỆU}
+\begin{onecolentry}
+    Computer Engineering graduate seeking an entry-level role in embedded systems or semiconductor design. Interested in IoT, hardware--software integration, and Physical Design (PD). Quick learner with strong ownership, discipline, and practical problem-solving mindset.
+
+    \vspace{0.05cm}
+    \textit{Kỹ sư tốt nghiệp ngành Kỹ thuật Máy tính, định hướng vị trí fresher trong hệ thống nhúng hoặc thiết kế bán dẫn. Quan tâm đến IoT, tích hợp phần cứng--phần mềm và Physical Design (PD). Có tinh thần học nhanh, trách nhiệm, kỷ luật và tư duy giải quyết vấn đề thực tế.}
+\end{onecolentry}
+
+\section{TECHNICAL SKILLS / KỸ NĂNG}
+\begin{onecolentry}
+    \begin{highlights}
+        \item \textbf{Languages / Ngôn ngữ:} English (IELTS 6.0), Vietnamese
+        \item \textbf{Programming / Lập trình:} Java, C/C++, HTML, CSS, Assembly (ARM Cortex-M, MIPS)
+        \item \textbf{Backend:} Java, RESTful APIs, database design / thiết kế cơ sở dữ liệu
+        \item \textbf{Microcontrollers / Vi điều khiển:} Arduino, STM32, Raspberry Pi, ESP32/ESP8266
+        \item \textbf{Tools / Công cụ:} STM32CubeIDE, Keil MDK, PlatformIO, Proteus, GCC, GDB, Git, VS Code, MATLAB
+        \item \textbf{Interfaces / Giao tiếp:} SPI, I2C, UART, ADC, DAC, Bluetooth, Wi-Fi, LoRa
+        \item \textbf{Concepts / Kiến thức:} FreeRTOS, DSP fundamentals, low-power design, JTAG/SWD debugging, floorplanning, placement, CTS, routing, physical verification
+    \end{highlights}
+\end{onecolentry}
+
+\section{PROFESSIONAL EXPERIENCE / KINH NGHIỆM}
+
+\begin{twocolentry}[Piontek]{JUNE 2023 -- DECEMBER 2023}
+    \textit{Engineering Intern / Thực tập sinh kỹ thuật}
+\end{twocolentry}
+\begin{onecolentry}
+    \begin{highlights}
+        \item Engineering internship during university; became familiar with engineering tools, development environments, and basic technical workflows.
+        \item \textit{Thực tập kỹ thuật trong thời gian học đại học; làm quen với công cụ kỹ thuật, môi trường phát triển và quy trình kỹ thuật cơ bản.}
+        \item Improved problem-solving, teamwork, and technical communication skills through practical tasks and mentor guidance.
+        \item \textit{Cải thiện kỹ năng giải quyết vấn đề, làm việc nhóm và giao tiếp kỹ thuật thông qua công việc thực tế và hướng dẫn từ mentor.}
+    \end{highlights}
+\end{onecolentry}
+
+\begin{twocolentry}[DigiEx]{JUNE 2025 -- NOVEMBER 2025}
+    \textit{Backend Developer / Lập trình viên Backend}
+\end{twocolentry}
+\begin{onecolentry}
+    \begin{highlights}
+        \item \textbf{Green Nation - Banking System:} Worked on backend development for a French banking project using Java and Spring Framework.
+        \item \textit{Tham gia phát triển backend cho dự án ngân hàng Pháp, sử dụng Java và Spring Framework.}
+        \item Developed RESTful APIs, handled MySQL-based data creation/querying, and applied authentication, basic security, and code review workflows.
+        \item \textit{Phát triển RESTful API, xử lý tạo/truy vấn dữ liệu MySQL, áp dụng xác thực, bảo mật cơ bản và quy trình review code.}
+        \item \textbf{School Management System:} Built CRUD APIs and business logic for student information and grade management.
+        \item \textit{Xây dựng CRUD API và logic nghiệp vụ cho quản lý thông tin học sinh và điểm số.}
+        \item \textbf{Technologies / Công nghệ:} Java, Spring Framework, MySQL, RESTful APIs, Git, Maven.
+    \end{highlights}
+\end{onecolentry}
+
+\begin{twocolentry}[Skyechip]{JANUARY 2026 -- APRIL 2026}
+    \textit{Physical Design (PD) Intern / Thực tập sinh Physical Design}
+\end{twocolentry}
+\begin{onecolentry}
+    \begin{highlights}
+        \item Learned PD fundamentals in ASIC/IC development, including floorplanning, placement, CTS, routing, and physical verification.
+        \item \textit{Học nền tảng Physical Design trong phát triển ASIC/IC, gồm floorplanning, placement, CTS, routing và physical verification.}
+        \item Built understanding of timing closure, power, area, congestion, design rule compliance, and backend flow from netlist handoff to layout implementation.
+        \item \textit{Nắm các mục tiêu backend như timing closure, power, area, congestion, tuân thủ design rule và luồng từ netlist đến layout.}
+    \end{highlights}
+\end{onecolentry}
+
+\begin{twocolentry}[ICTC -- Physical Design (PD) Training Program]{MAY 2026 -- JULY 2026}
+    \textit{Trainee / Học viên}
+\end{twocolentry}
+\begin{onecolentry}
+    \begin{highlights}
+        \item Currently studying foundational PD concepts, ASIC backend implementation flow, Linux commands, scripting, and EDA tool workflows.
+        \item \textit{Đang học nền tảng PD, luồng triển khai backend ASIC, lệnh Linux, scripting và quy trình sử dụng công cụ EDA.}
+        \item Practicing timing analysis, congestion handling, power optimization, physical verification, and implementation labs.
+        \item \textit{Thực hành timing analysis, xử lý congestion, tối ưu power, physical verification và các bài lab triển khai.}
+    \end{highlights}
+\end{onecolentry}
+
+\section{ACADEMIC PROJECTS / DỰ ÁN HỌC THUẬT}
+
+\begin{twocolentry}[Blockchain-based Peer-to-Peer Energy Trading Platform]{MARCH 2023 -- JUNE 2023}
+\end{twocolentry}
+\begin{onecolentry}
+    \begin{highlights}
+        \item Developed a decentralized energy trading prototype using Arduino and blockchain principles; implemented MQTT communication to a Raspberry Pi broker and validated circuits in Proteus.
+        \item \textit{Phát triển prototype giao dịch năng lượng phi tập trung bằng Arduino và nguyên lý blockchain; triển khai MQTT đến Raspberry Pi broker và kiểm thử mạch trên Proteus.}
+        \item \textbf{Technologies / Công nghệ:} Arduino Uno R3, ESP8266, MQTT, SHA-256 hashing, Git.
+    \end{highlights}
+\end{onecolentry}
+
+\begin{twocolentry}[Automated Plant Watering System with IoT Monitoring]{SEPTEMBER 2023 -- DECEMBER 2023}
+\end{twocolentry}
+\begin{onecolentry}
+    \begin{highlights}
+        \item Built an automated watering system using ESP32, soil moisture sensors, relay-controlled pumping, and threshold-based autonomous control logic.
+        \item \textit{Xây dựng hệ thống tưới cây tự động dùng ESP32, cảm biến độ ẩm đất, bơm điều khiển bằng relay và logic tự động theo ngưỡng.}
+        \item \textbf{Technologies / Công nghệ:} ESP32, DHT11, capacitive soil moisture sensors, relay module, Arduino IDE.
+    \end{highlights}
+\end{onecolentry}
+
+\section{EDUCATION / HỌC VẤN}
+
+\begin{twocolentry}[HO CHI MINH CITY UNIVERSITY OF TECHNOLOGY]{AUGUST 2019 -- MAY 2025}
+    Bachelor of Engineering in Computer Engineering \textbar{} GPA: 6.5/10 \\
+    \textit{Kỹ sư Kỹ thuật Máy tính \textbar{} GPA: 6.5/10} \\[3pt]
+    \textbf{Relevant Coursework / Môn học liên quan:} Data Structures \& Algorithms, Microprocessors \& Microcontrollers, Embedded Systems Design, Computer Architecture, Operating Systems, Circuit Theory, Digital Logic Design. \\
+    \textbf{Key Projects / Dự án chính:} 8-bit ALU design using VHDL; line-following robot (C programming) -- 2\textsuperscript{nd} place in university competition; IoT-based Smart Environmental Monitoring System; LPWAN Node for Agricultural Monitoring.
+\end{twocolentry}
+
+\begin{twocolentry}[LE KHIET HIGH SCHOOL FOR THE GIFTED]{SEPTEMBER 2016 -- JUNE 2019}
+    Specialized in Mathematics / Chuyên Toán
+\end{twocolentry}
+
+\section{HONORS, AWARDS \& CERTIFICATIONS / THÀNH TÍCH \& CHỨNG CHỈ}
+\begin{onecolentry}
+    \begin{highlights}
+        \item IELTS Certificate -- Overall 6.0 \hfill \textit{2022}
+        \item Provincial-level Consolation Prize, Excellent Student Competition in Mathematics (Grade 9) / Giải Khuyến khích cấp tỉnh môn Toán lớp 9
+        \item Third Prize, City-level Excellent Student Competition in Mathematics (Grade 8) / Giải Ba cấp thành phố môn Toán lớp 8
+        \item Provincial-level Consolation Prize, Mathematics \& English Olympiad / Giải Khuyến khích cấp tỉnh Olympic Toán \& Tiếng Anh
+    \end{highlights}
+\end{onecolentry}
+
+\end{document}

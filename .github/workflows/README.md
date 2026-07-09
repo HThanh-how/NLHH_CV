@@ -8,7 +8,7 @@ This directory contains the GitHub Actions workflow configuration for automated 
 
 ## 🎯 Workflow Overview
 
-The workflow automatically builds a LaTeX resume PDF, uploads artifacts, and creates GitHub releases with changelogs.
+The workflow automatically builds the English and bilingual LaTeX resume PDFs, uploads artifacts, and creates GitHub releases with changelogs.
 
 ## 🔄 Workflow Jobs
 
@@ -20,18 +20,22 @@ The workflow automatically builds a LaTeX resume PDF, uploads artifacts, and cre
 
 1. **Checkout**: Clones the repository
 2. **Diagnose**: Displays diagnostic information (branch, commit SHA, file listing)
-3. **Compile LaTeX (XeLaTeX)**: 
+3. **Compile LaTeX (XeLaTeX)**:
    - Uses `xu-cheng/latex-action@v3` for compilation
-   - Compiles `main.tex` using XeLaTeX
-   - Installs required packages: `fontawesome5`, `fontspec`, `lm`, `babel-english`
+   - Compiles each configured matrix file using XeLaTeX:
+     - `main.tex`
+     - `cv-bilingual.tex`
+   - Installs required packages: `fontawesome5`, `fontspec`, `lm`, `babel-english`, `etoolbox`
+   - Installs `fonts-dejavu-core` for Vietnamese glyph support in the bilingual CV
    - Enables shell escape for advanced features
-4. **Publish PDF**: Copies `main.pdf` to `Nguyen_Luong_Huu_Huy_Resume.pdf`
-5. **Upload Artifact (PDF)**: Uploads PDF as artifact named `resume-pdf`
-6. **Upload Logs**: Uploads compilation logs (always, even on failure)
+4. **Publish PDF**: Renames generated PDFs to release-ready filenames
+5. **Upload Artifact (PDF)**: Uploads each PDF as a separate artifact
+6. **Upload Logs**: Uploads compilation logs for each build (always, even on failure)
 
 **Output**: 
-- PDF artifact: `resume-pdf`
-- Logs artifact: `resume-logs` (contains `.log`, `.aux`, `.toc`, `.lof`, `.lot` files)
+- English PDF artifact: `resume-en-pdf`
+- Bilingual PDF artifact: `resume-bilingual-pdf`
+- Logs artifacts: `resume-en-pdf-logs`, `resume-bilingual-pdf-logs`
 
 ### Job 2: `release`
 
@@ -45,13 +49,13 @@ The workflow automatically builds a LaTeX resume PDF, uploads artifacts, and cre
    - Generates changelog from commits since last build
    - Creates `release_notes.md` file
    - Falls back to recent commits if no previous build found
-3. **Download Artifact**: Downloads the PDF artifact from `build-pdf` job
+3. **Download Artifacts**: Downloads both PDF artifacts from the `build-pdf` job
 4. **Create GitHub Release**:
    - Creates release with tag: `build-{run_number}`
    - Uses generated changelog as release notes
-   - Attaches PDF to release
+   - Attaches both PDFs to release
 
-**Output**: GitHub Release with PDF attachment
+**Output**: GitHub Release with English and bilingual PDF attachments
 
 ## 🔍 Changelog Generation Logic
 
@@ -83,13 +87,15 @@ The workflow installs these packages via `tlmgr`:
 ```yaml
 pre_compile: |
   tlmgr update --self
-  tlmgr install fontawesome5 fontspec lm babel-english
+  tlmgr install fontawesome5 fontspec lm babel-english etoolbox
 ```
+
+The workflow also installs the Ubuntu package `fonts-dejavu-core` for Unicode Vietnamese rendering.
 
 ### LaTeX Compilation Settings
 
 ```yaml
-root_file: main.tex
+root_file: ${{ matrix.root_file }}
 latexmk_use_xelatex: true
 latexmk_shell_escape: true
 ```
@@ -108,7 +114,7 @@ permissions:
 
 | Event | Condition | Runs Jobs |
 |-------|-----------|-----------|
-| `push` | Any branch | `build-pdf` |
+| `push` | Any branch except release condition | `build-pdf` |
 | `push` | `main` branch | `build-pdf` + `release` |
 | `pull_request` | Any PR | `build-pdf` only |
 | `workflow_dispatch` | Manual trigger | `build-pdf` only |
@@ -146,7 +152,7 @@ permissions:
 
 **Check**:
 1. Ensure `build-pdf` job completed successfully
-2. Verify artifact name matches: `resume-pdf`
+2. Verify artifact names match: `resume-en-pdf` and `resume-bilingual-pdf`
 3. Check artifact retention settings (default: 90 days)
 
 ## 🔐 Security Considerations
