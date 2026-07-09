@@ -89,10 +89,10 @@ docker run --rm -v "$PWD":/workdir xu-cheng/latex-action:latest \
 - `main.pdf` for the English CV
 - `cv-bilingual.pdf` for the English/Vietnamese CV
 
-CI renames these to:
+CI copies and renames these into `dist/`:
 
-- `Nguyen_Luong_Huu_Huy_Resume_EN.pdf`
-- `Nguyen_Luong_Huu_Huy_Resume_Bilingual.pdf`
+- `dist/Nguyen_Luong_Huu_Huy_Resume_EN.pdf`
+- `dist/Nguyen_Luong_Huu_Huy_Resume_Bilingual.pdf`
 
 ### Building Multiple Times
 

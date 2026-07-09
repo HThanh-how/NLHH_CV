@@ -28,7 +28,7 @@ The workflow automatically builds the English and bilingual LaTeX resume PDFs, u
    - Installs required packages: `fontawesome5`, `fontspec`, `lm`, `babel-english`, `etoolbox`
    - Installs `fonts-dejavu-core` for Vietnamese glyph support in the bilingual CV
    - Enables shell escape for advanced features
-4. **Publish PDF**: Renames generated PDFs to release-ready filenames
+4. **Publish PDF**: Copies generated PDFs into `dist/` with release-ready filenames
 5. **Upload Artifact (PDF)**: Uploads each PDF as a separate artifact
 6. **Upload Logs**: Uploads compilation logs for each build (always, even on failure)
 

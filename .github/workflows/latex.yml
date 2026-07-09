@@ -43,19 +43,19 @@ jobs:
             tlmgr update --self
             tlmgr install fontawesome5 fontspec lm babel-english etoolbox
 
-      - name: Publish PDF to project root
+      - name: Publish renamed PDF
         run: |
-          cp "${{ matrix.root_file }}" source.tex
+          mkdir -p dist
           PDF_FILE="${{ matrix.root_file }}"
           PDF_FILE="${PDF_FILE%.tex}.pdf"
-          cp "$PDF_FILE" "${{ matrix.pdf_name }}"
-          ls -la
+          cp "$PDF_FILE" "dist/${{ matrix.pdf_name }}"
+          ls -la dist
 
       - name: Upload artifact (PDF)
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact_name }}
-          path: ${{ matrix.pdf_name }}
+          path: dist/${{ matrix.pdf_name }}
 
       - name: Upload logs (always)
         if: always()
