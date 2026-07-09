@@ -25,8 +25,7 @@ The workflow automatically builds the English and bilingual LaTeX resume PDFs, u
    - Compiles each configured matrix file using XeLaTeX:
      - `main.tex`
      - `cv-bilingual.tex`
-   - Installs required packages: `fontawesome5`, `fontspec`, `lm`, `babel-english`, `etoolbox`
-   - Installs `font-dejavu` for Vietnamese glyph support in the bilingual CV
+   - Installs required packages: `fontawesome5`, `fontspec`, `lm`, `babel-english`, `etoolbox`, `libertinus`, `tex-gyre`
    - Enables shell escape for advanced features
 4. **Publish PDF**: Copies generated PDFs into `dist/` with release-ready filenames
 5. **Upload Artifact (PDF)**: Uploads each PDF as a separate artifact
@@ -87,10 +86,8 @@ The workflow installs these packages via `tlmgr`:
 ```yaml
 pre_compile: |
   tlmgr update --self
-  tlmgr install fontawesome5 fontspec lm babel-english etoolbox
+  tlmgr install fontawesome5 fontspec lm babel-english etoolbox libertinus tex-gyre
 ```
-
-The workflow also installs the Alpine package `font-dejavu` for Unicode Vietnamese rendering.
 
 ### LaTeX Compilation Settings
 

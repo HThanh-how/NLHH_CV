@@ -37,11 +37,9 @@ jobs:
           root_file: ${{ matrix.root_file }}
           latexmk_use_xelatex: true
           latexmk_shell_escape: true
-          extra_system_packages: |
-            font-dejavu
           pre_compile: |
             tlmgr update --self
-            tlmgr install fontawesome5 fontspec lm babel-english etoolbox
+            tlmgr install fontawesome5 fontspec lm babel-english etoolbox libertinus tex-gyre
 
       - name: Publish renamed PDF
         run: |

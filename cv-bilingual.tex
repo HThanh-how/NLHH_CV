@@ -40,13 +40,23 @@
     \pdfgentounicode=1
 \else
     \usepackage{fontspec}
-    \IfFontExistsTF{Times New Roman}{
-        \setmainfont{Times New Roman}
+    \IfFontExistsTF{Libertinus Serif}{
+        \setmainfont{Libertinus Serif}[
+            Ligatures=TeX,
+            Scale=0.98
+        ]
     }{
-        \IfFontExistsTF{DejaVu Serif}{
-            \setmainfont{DejaVu Serif}
+        \IfFontExistsTF{TeX Gyre Pagella}{
+            \setmainfont{TeX Gyre Pagella}[
+                Ligatures=TeX,
+                Scale=0.98
+            ]
         }{
-            \setmainfont{Latin Modern Roman}
+            \IfFontExistsTF{Times New Roman}{
+                \setmainfont{Times New Roman}
+            }{
+                \setmainfont{Latin Modern Roman}
+            }
         }
     }
 \fi
