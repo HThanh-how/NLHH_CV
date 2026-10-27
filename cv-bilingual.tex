@@ -14,6 +14,7 @@
 \usepackage{enumitem}
 \usepackage{fontawesome5}
 \usepackage{amsmath}
+\usepackage{graphicx}
 \usepackage[
     pdftitle={NGUYEN LUONG HUU HUY's Bilingual CV},
     pdfauthor={NGUYEN LUONG HUU HUY},
@@ -59,6 +60,13 @@
             }
         }
     }
+\fi
+
+\newif\ifwithphoto
+\ifdefined\withphoto
+  \withphototrue
+\else
+  \withphotofalse
 \fi
 
 \AtBeginEnvironment{adjustwidth}{\partopsep0pt}
@@ -125,6 +133,26 @@
 \begin{document}
 \pagestyle{empty}
 
+\ifwithphoto
+\noindent
+\begin{minipage}[c]{0.78\textwidth}
+    \textbf{\fontsize{22pt}{22pt}\selectfont NGUYEN LUONG HUU HUY}\\[0.08cm]
+    \normalsize\textit{\bilingual{Embedded Systems / Physical Design Engineer}{Kỹ sư Hệ thống Nhúng / Thiết kế Vật lý}}\\[0.12cm]
+    \normalsize
+    Ho Chi Minh City, Viet Nam \\[0.04cm]
+    \mbox{\color{black}\footnotesize\faPhone*}\hspace*{0.13cm}0946790659
+    \kern 0.25cm
+    \mbox{\color{black}\footnotesize\faEnvelope[regular]}\hspace*{0.13cm}\headerlink{mailto:nguyenhuuhuybe@gmail.com}{nguyenhuuhuybe@gmail.com} \\[0.08cm]
+    \mbox{\color{black}\footnotesize\faLinkedin}\hspace*{0.13cm}\headerlink{https://www.linkedin.com/in/huy-nguyen-luong-huu-huu}{linkedin.com/in/huy-nguyen-luong-huu-huu}
+    \kern 0.25cm
+    \mbox{\color{black}\footnotesize\faGithub}\hspace*{0.13cm}\headerlink{https://github.com/HuyBK0408}{github.com/HuyBK0408}
+\end{minipage}%
+\hfill
+\begin{minipage}[c]{0.20\textwidth}
+    \raggedleft
+    \fboxsep=0pt\fboxrule=0.6pt\fcolorbox{gray!40}{white}{\includegraphics[width=2.5cm,height=3.33cm,keepaspectratio]{avatar.png}}
+\end{minipage}
+\else
 \begin{header}
     \textbf{\fontsize{23pt}{23pt}\selectfont NGUYEN LUONG HUU HUY}
 
@@ -142,6 +170,7 @@
     \kern 0.25cm
     \mbox{\color{black}\footnotesize\faGithub}\hspace*{0.13cm}\headerlink{https://github.com/HuyBK0408}{github.com/HuyBK0408}
 \end{header}
+\fi
 
 \vspace{0.18cm}
 
@@ -207,6 +236,19 @@
     \begin{highlights}
         \item Học nền tảng PD, luồng triển khai backend ASIC, lệnh Linux, scripting và quy trình sử dụng công cụ EDA. \textit{/ Studying PD concepts, ASIC backend flow, Linux, scripting, and EDA workflows.}
         \item Thực hành timing analysis, xử lý congestion, tối ưu power, physical verification và các bài lab triển khai. \textit{/ Practicing timing analysis, congestion handling, power optimization, and implementation labs.}
+    \end{highlights}
+\end{onecolentry}
+
+\begin{twocolentry}[Intel -- Hỗ trợ Kỹ thuật Sản xuất / Manufacturing Technical Support]{08/2026 -- 10/2026}
+    \textit{Nhân viên Hỗ trợ Kỹ thuật / Technical Support Staff}
+\end{twocolentry}
+\begin{onecolentry}
+    \begin{highlights}
+        \item Giám sát thiết bị, quy trình sản xuất và dữ liệu vận hành nhằm đảm bảo dây chuyền hoạt động ổn định. \textit{/ Supported manufacturing operations by monitoring equipment, production processes, and operational data to ensure stable production.}
+        \item Thu thập và phân tích dữ liệu sản xuất để hỗ trợ điều chỉnh thiết bị và tối ưu hóa quy trình. \textit{/ Collected and analysed production data to support equipment adjustments and process optimisation.}
+        \item Hỗ trợ xử lý sự cố thiết bị và giải quyết các bất thường trong sản xuất nhằm duy trì chất lượng sản phẩm và sự ổn định quy trình. \textit{/ Assisted in troubleshooting equipment issues and addressing production abnormalities to maintain product quality and process stability.}
+        \item Tuân thủ quy trình sản xuất, tiêu chuẩn an toàn và hướng dẫn kỹ thuật bảo đảm tính chuẩn hóa trong vận hành. \textit{/ Followed manufacturing procedures, safety requirements, and technical instructions to ensure compliance with operational standards.}
+        \item Phối hợp chặt chẽ với các thành viên trong nhóm để hỗ trợ hoạt động sản xuất, nâng cao hiệu suất và duy trì chất lượng sản phẩm. \textit{/ Collaborated with team members to support production activities, improve process efficiency, and maintain product quality.}
     \end{highlights}
 \end{onecolentry}
 

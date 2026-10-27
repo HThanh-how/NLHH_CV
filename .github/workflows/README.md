@@ -8,7 +8,7 @@ This directory contains the GitHub Actions workflow configuration for automated 
 
 ## 🎯 Workflow Overview
 
-The workflow automatically builds the English and bilingual LaTeX resume PDFs, uploads artifacts, and creates GitHub releases with changelogs.
+The workflow automatically builds English and bilingual LaTeX resume PDFs (both with photo and without photo versions), uploads artifacts, and creates GitHub releases with changelogs.
 
 ## 🔄 Workflow Jobs
 
@@ -23,18 +23,26 @@ The workflow automatically builds the English and bilingual LaTeX resume PDFs, u
 3. **Compile LaTeX (XeLaTeX)**:
    - Uses `xu-cheng/latex-action@v3` for compilation
    - Compiles each configured matrix file using XeLaTeX:
-     - `main.tex`
-     - `cv-bilingual.tex`
+     - `main.tex` (English, no photo)
+     - `main-photo.tex` (English, with photo)
+     - `cv-bilingual.tex` (Bilingual EN/VI, no photo)
+     - `cv-bilingual-photo.tex` (Bilingual EN/VI, with photo)
    - Installs required packages: `fontawesome5`, `fontspec`, `lm`, `babel-english`, `etoolbox`, `libertinus`, `tex-gyre`
    - Enables shell escape for advanced features
-4. **Publish PDF**: Copies generated PDFs into `dist/` with release-ready filenames
+4. **Publish PDF**: Copies generated PDFs into `dist/` with release-ready filenames:
+   - `Nguyen_Luong_Huu_Huy_Resume_EN.pdf`
+   - `Nguyen_Luong_Huu_Huy_Resume_EN_Photo.pdf`
+   - `Nguyen_Luong_Huu_Huy_Resume_Bilingual.pdf`
+   - `Nguyen_Luong_Huu_Huy_Resume_Bilingual_Photo.pdf`
 5. **Upload Artifact (PDF)**: Uploads each PDF as a separate artifact
 6. **Upload Logs**: Uploads compilation logs for each build (always, even on failure)
 
 **Output**: 
-- English PDF artifact: `resume-en-pdf`
-- Bilingual PDF artifact: `resume-bilingual-pdf`
-- Logs artifacts: `resume-en-pdf-logs`, `resume-bilingual-pdf-logs`
+- `resume-en-pdf`
+- `resume-en-photo-pdf`
+- `resume-bilingual-pdf`
+- `resume-bilingual-photo-pdf`
+- Corresponding build log artifacts
 
 ### Job 2: `release`
 
@@ -48,13 +56,13 @@ The workflow automatically builds the English and bilingual LaTeX resume PDFs, u
    - Generates changelog from commits since last build
    - Creates `release_notes.md` file
    - Falls back to recent commits if no previous build found
-3. **Download Artifacts**: Downloads both PDF artifacts from the `build-pdf` job
+3. **Download Artifacts**: Downloads all 4 PDF artifacts from the `build-pdf` job into `dist/`
 4. **Create GitHub Release**:
    - Creates release with tag: `build-{run_number}`
    - Uses generated changelog as release notes
-   - Attaches both PDFs to release
+   - Attaches all 4 PDFs to release
 
-**Output**: GitHub Release with English and bilingual PDF attachments
+**Output**: GitHub Release with all 4 PDF attachments
 
 ## 🔍 Changelog Generation Logic
 
@@ -116,77 +124,9 @@ permissions:
 | `pull_request` | Any PR | `build-pdf` only |
 | `workflow_dispatch` | Manual trigger | `build-pdf` only |
 
-## 🐛 Troubleshooting
-
-### Build Fails
-
-**Check**:
-1. View logs in Actions tab
-2. Check for missing LaTeX packages
-3. Verify `main.tex` syntax is correct
-4. Ensure all required packages are listed in `pre_compile`
-
-**Common Issues**:
-- Missing package: Add to `pre_compile` section
-- Syntax error: Check LaTeX compilation locally first
-- Font issues: Ensure fonts are available in TeX Live
-
-### Release Not Created
-
-**Possible Causes**:
-1. Build job failed (release only runs on success)
-2. Not pushing to `main` branch
-3. Insufficient permissions (check repository settings)
-
-### Changelog Empty
-
-**Check**:
-1. Verify tags exist: `git tag -l "build-*"`
-2. Check if commits exist between last tag and HEAD
-3. Review changelog generation script in workflow
-
-### Artifact Not Found
-
-**Check**:
-1. Ensure `build-pdf` job completed successfully
-2. Verify artifact names match: `resume-en-pdf` and `resume-bilingual-pdf`
-3. Check artifact retention settings (default: 90 days)
-
-## 🔐 Security Considerations
-
-- **Shell Escape**: Enabled for LaTeX features, but be cautious with untrusted content
-- **Permissions**: Only `contents: write` is needed (for releases)
-- **Secrets**: No secrets required for this workflow
-
-## 📈 Performance
-
-- **Average Build Time**: 30-60 seconds
-- **Artifact Size**: ~50-100 KB (PDF) + logs
-- **Release Creation**: ~5-10 seconds
-
-## 🔄 Workflow Updates
-
-To modify the workflow:
-
-1. Edit `.github/workflows/latex.yml`
-2. Test locally if possible
-3. Push changes to trigger workflow
-4. Monitor Actions tab for results
-
-## 📚 Related Documentation
-
-- [GitHub Actions Documentation](https://docs.github.com/en/actions)
-- [xu-cheng/latex-action](https://github.com/xu-cheng/latex-action)
-- [LaTeX Documentation](https://www.latex-project.org/help/documentation/)
-
 ## 💡 Tips
 
 1. **Test Locally First**: Always test LaTeX compilation locally before pushing
 2. **Check Logs**: Review compilation logs in artifacts for warnings
 3. **Incremental Builds**: Workflow uses latexmk which handles multiple passes automatically
 4. **Tag Management**: Build tags are created automatically, no manual management needed
-
----
-
-**Last Updated**: See workflow file for latest configuration
-

@@ -18,9 +18,15 @@ jobs:
           - root_file: main.tex
             pdf_name: Nguyen_Luong_Huu_Huy_Resume_EN.pdf
             artifact_name: resume-en-pdf
+          - root_file: main-photo.tex
+            pdf_name: Nguyen_Luong_Huu_Huy_Resume_EN_Photo.pdf
+            artifact_name: resume-en-photo-pdf
           - root_file: cv-bilingual.tex
             pdf_name: Nguyen_Luong_Huu_Huy_Resume_Bilingual.pdf
             artifact_name: resume-bilingual-pdf
+          - root_file: cv-bilingual-photo.tex
+            pdf_name: Nguyen_Luong_Huu_Huy_Resume_Bilingual_Photo.pdf
+            artifact_name: resume-bilingual-photo-pdf
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -142,10 +148,22 @@ jobs:
           name: resume-en-pdf
           path: dist
 
+      - name: Download English Photo PDF
+        uses: actions/download-artifact@v4
+        with:
+          name: resume-en-photo-pdf
+          path: dist
+
       - name: Download bilingual PDF
         uses: actions/download-artifact@v4
         with:
           name: resume-bilingual-pdf
+          path: dist
+
+      - name: Download bilingual Photo PDF
+        uses: actions/download-artifact@v4
+        with:
+          name: resume-bilingual-photo-pdf
           path: dist
 
       - name: List release assets
@@ -159,4 +177,6 @@ jobs:
           body_path: release_notes.md
           files: |
             dist/Nguyen_Luong_Huu_Huy_Resume_EN.pdf
+            dist/Nguyen_Luong_Huu_Huy_Resume_EN_Photo.pdf
             dist/Nguyen_Luong_Huu_Huy_Resume_Bilingual.pdf
+            dist/Nguyen_Luong_Huu_Huy_Resume_Bilingual_Photo.pdf
