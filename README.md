@@ -7,7 +7,7 @@
 ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white)
 ![PDF](https://img.shields.io/badge/PDF-FF0000?style=for-the-badge&logo=adobe-acrobat-reader&logoColor=white)
 
-**Professional LaTeX-based resume with automated PDF generation for English and bilingual versions**
+**Professional LaTeX-based resume with automated PDF generation for English and bilingual versions (with and without photo)**
 
 [📥 Download Latest PDFs](https://github.com/HThanh-how/NLHH_CV/releases/latest) • [🔧 Workflow Details](.github/workflows/README.md)
 
@@ -18,11 +18,12 @@
 ## ✨ Features
 
 - 🎨 **Professional Design**: Clean, modern CV layout with proper typography and color scheme
-- 🌐 **Bilingual CV**: English and Vietnamese content in one ATS-friendly LaTeX file
-- 🤖 **Automated Build**: GitHub Actions workflow automatically compiles all CV PDFs on every push and pull request
+- 🌐 **Bilingual CV**: English and Vietnamese content in ATS-friendly LaTeX files
+- 📷 **Photo & No-Photo Versions**: Flexible options supporting standard text-only ATS format and professional ID-headshot format
+- 🤖 **Automated Build**: GitHub Actions workflow automatically compiles all 4 CV PDFs on every push and pull request
 - 📦 **Auto Release**: Creates GitHub releases with changelog from commit history
 - 🔍 **ATS-Friendly**: PDF is optimized for Applicant Tracking Systems (machine-readable)
-- 📱 **Responsive Layout**: Two-column layout with proper spacing and formatting
+- 📱 **Responsive Layout**: Well-balanced 2-page layout with proper spacing and formatting
 - 🔗 **Clickable Links**: Hyperlinks for email, LinkedIn, and GitHub profiles
 - 🎯 **Icon Support**: FontAwesome5 icons for contact information
 
@@ -30,8 +31,13 @@
 
 ```text
 NLHH_CV/
-├── main.tex                    # English CV source file
-├── cv-bilingual.tex            # English/Vietnamese bilingual CV source file
+├── main.tex                    # English CV source file (no photo)
+├── main-photo.tex              # English CV source file (with photo)
+├── cv-bilingual.tex            # English/Vietnamese bilingual CV source file (no photo)
+├── cv-bilingual-photo.tex      # English/Vietnamese bilingual CV source file (with photo)
+├── avatar.png                  # High-resolution 3x4 professional portrait headshot
+├── assets/
+│   └── avatar.png              # Avatar asset backup
 ├── .gitignore                  # Ignores LaTeX build artifacts and generated PDFs
 ├── .github/
 │   └── workflows/
@@ -43,206 +49,48 @@ NLHH_CV/
 
 ## 🚀 Quick Start
 
-### Prerequisites
-
-Before building locally, ensure you have:
-
-- **TeX Live** distribution (full installation recommended)
-  - Windows: [MiKTeX](https://miktex.org/) or [TeX Live](https://www.tug.org/texlive/)
-  - Linux: `sudo apt-get install texlive-full`
-  - macOS: `brew install --cask mactex`
-- **XeLaTeX** compiler (included in TeX Live)
-- **Required LaTeX packages** (automatically installed by workflow):
-  - `fontawesome5` - Icons
-  - `fontspec` - Font handling for XeLaTeX
-  - `geometry` - Page layout
-  - `titlesec` - Section formatting
-  - `xcolor` - Colors
-  - `enumitem` - List customization
-  - `hyperref` - Hyperlinks
-  - `paracol` - Multi-column layout
-  - And more (see `main.tex` for complete list)
-
 ### Building Locally
 
-#### Option 1: Using XeLaTeX directly
-
 ```bash
-xelatex -shell-escape main.tex
-```
+# English CV (no photo & with photo)
+xelatex -interaction=nonstopmode main.tex
+xelatex -interaction=nonstopmode main-photo.tex
 
-#### Option 2: Using latexmk (recommended)
-
-```bash
-latexmk -xelatex -shell-escape main.tex
-```
-
-#### Option 3: Using Docker (if available)
-
-```bash
-docker run --rm -v "$PWD":/workdir xu-cheng/latex-action:latest \
-  latexmk -xelatex -shell-escape main.tex
+# Bilingual CV (no photo & with photo)
+xelatex -interaction=nonstopmode cv-bilingual.tex
+xelatex -interaction=nonstopmode cv-bilingual-photo.tex
 ```
 
 **Outputs**:
-
-- `main.pdf` for the English CV
-- `cv-bilingual.pdf` for the English/Vietnamese CV
-
-CI copies and renames these into `dist/`:
-
-- `dist/Nguyen_Luong_Huu_Huy_Resume_EN.pdf`
-- `dist/Nguyen_Luong_Huu_Huy_Resume_Bilingual.pdf`
-
-### Building Multiple Times
-
-LaTeX often requires multiple passes for references and table of contents:
-
-```bash
-latexmk -xelatex -shell-escape -pdf main.tex
-latexmk -xelatex -shell-escape -pdf cv-bilingual.tex
-```
-
-This automatically runs the necessary number of passes.
+- `main.pdf` -> `dist/Nguyen_Luong_Huu_Huy_Resume_EN.pdf`
+- `main-photo.pdf` -> `dist/Nguyen_Luong_Huu_Huy_Resume_EN_Photo.pdf`
+- `cv-bilingual.pdf` -> `dist/Nguyen_Luong_Huu_Huy_Resume_Bilingual.pdf`
+- `cv-bilingual-photo.pdf` -> `dist/Nguyen_Luong_Huu_Huy_Resume_Bilingual_Photo.pdf`
 
 ## 🔄 GitHub Actions Workflow
 
 The repository includes an automated CI/CD pipeline that:
 
-1. ✅ **Builds both PDFs** on every push and pull request
-2. 📤 **Uploads artifacts** for English PDF, bilingual PDF, and compilation logs
+1. ✅ **Builds all 4 PDFs** on every push and pull request
+2. 📤 **Uploads artifacts** for all versions and compilation logs
 3. 🏷️ **Creates GitHub Release** on push to the `main` branch only
 4. 📝 **Generates changelog** from commits since last successful build
-5. 📎 **Attaches both PDFs** to the release
-
-### Workflow Details
-
-For detailed information about the workflow, see [`.github/workflows/README.md`](.github/workflows/README.md).
-
-### Release Process
-
-- Each successful push to `main` creates a release with tag `build-{run_number}`
-- Changelog includes commits since the last successful build tag
-- English and bilingual PDFs are automatically attached to the release
-- Artifacts are available for download from the Actions tab
-
-### Viewing Build Status
-
-Check the latest build status:
-- Go to the **Actions** tab in GitHub
-- View workflow runs and download artifacts
-- Access the latest PDF from the **Releases** page
-
-## 🎨 Customization Guide
-
-### Updating Personal Information
-
-Edit the header section in `main.tex`:
-
-```latex
-\begin{header}
-    \textbf{\fontsize{24pt}{24pt}\selectfont YOUR NAME}
-    % ... contact information
-\end{header}
-```
-
-### Changing Colors
-
-Modify the primary color in the preamble:
-
-```latex
-\definecolor{primaryColor}{RGB}{0, 79, 144}  % Change RGB values
-```
-
-### Adjusting Spacing
-
-Modify the `highlights` environment:
-
-```latex
-\newenvironment{highlights}{
-    \begin{itemize}[
-        topsep=0.15cm,    % Space before list
-        itemsep=0.10cm,   % Space between items
-        % ... other options
-    ]
-}
-```
-
-### Adding Sections
-
-Follow the existing section structure:
-
-```latex
-\section{SECTION NAME}
-\begin{onecolentry}
-    % Content here
-\end{onecolentry}
-```
+5. 📎 **Attaches all 4 PDFs** to the release
 
 ## 📋 Resume Sections
 
-The current resumes include:
-
 - **About Me / Objective**: Career goals and interests
-- **Education**: Academic background and coursework
-- **Honors & Awards**: Academic achievements
-- **Certifications**: Professional certifications
-- **Skills**: Technical skills and competencies
-- **Work Experience**: Professional experience and projects
-- **Bilingual Version**: English content with Vietnamese translations for profile, skills, experience, projects, education, awards, and certifications
-
-## 🛠️ Troubleshooting
-
-### Common Issues
-
-**Issue**: Package not found
-```
-Solution: Install missing package using tlmgr install <package-name>
-```
-
-**Issue**: Font not found (XeLaTeX)
-```
-Solution: Ensure fonts are installed system-wide or use system fonts
-```
-
-**Issue**: Build fails in GitHub Actions
-```
-Solution: Check workflow logs in Actions tab, ensure all packages are listed in pre_compile
-```
-
-**Issue**: Hyperlinks not working
-```
-Solution: Ensure hyperref package is loaded and PDF is compiled with proper settings
-```
-
-### Getting Help
-
-- Check the [workflow documentation](.github/workflows/README.md)
-- Review GitHub Actions logs for build errors
-- Verify all required packages are installed locally
-
-## 📊 Build Statistics
-
-- **Compilation Time**: ~30-60 seconds (GitHub Actions)
-- **PDF Size**: ~50-100 KB (optimized)
-- **Pages**: 1-2 pages (depending on content)
-- **Format**: PDF/A compatible
-
-## 🔐 Privacy & Security
-
-- Personal information in this resume is public
-- Contact information can be modified before sharing
-- GitHub Actions logs may contain compilation details
-
-## 📝 License
-
-This resume template is for personal use. Feel free to fork and customize for your own resume.
-
-## 🙏 Acknowledgments
-
-- LaTeX community for excellent packages
-- [xu-cheng/latex-action](https://github.com/xu-cheng/latex-action) for GitHub Actions workflow
-- FontAwesome for icons
+- **Technical Skills**: Languages, programming, backend, microcontrollers, EDA tools, interfaces, concepts
+- **Professional Experience**:
+  - Piontek: Engineering Intern
+  - DigiEx: Backend Developer
+  - Skyechip: Physical Design (PD) Intern
+  - ICTC: Trainee in Physical Design Training Program
+  - **Intel – Manufacturing Technical Support**: Technical Support Staff
+- **Academic Projects**: Blockchain P2P Energy Trading, IoT Automated Plant Watering
+- **Honors & Awards**: Mathematics competitions & olympiads
+- **Education**: HCMUT – VNU-HCM (Bachelor of Engineering in Computer Engineering) & Le Khiet Gifted High School
+- **Certifications**: IELTS Certificate (6.0)
 
 ---
 

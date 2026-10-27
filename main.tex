@@ -3,11 +3,11 @@
 % Packages:
 \usepackage[
     ignoreheadfoot, 
-    top=2cm, 
-    bottom=2cm, 
-    left=2cm, 
-    right=2cm, 
-    footskip=1.0cm, 
+    top=1.65cm, 
+    bottom=1.65cm, 
+    left=1.65cm, 
+    right=1.65cm, 
+    footskip=0.8cm, 
     % showframe 
 ]{geometry} 
 \usepackage{titlesec} 
@@ -16,6 +16,7 @@
 \usepackage{enumitem} 
 \usepackage{fontawesome5} 
 \usepackage{amsmath} 
+\usepackage{graphicx}
 \usepackage[
     pdftitle={NGUYEN LUONG HUU HUY's CV},
     pdfauthor={NGUYEN LUONG HUU HUY},
@@ -33,13 +34,41 @@
 \usepackage{etoolbox}
 \usepackage{needspace} 
 \usepackage{iftex} 
-\usepackage[utf8]{inputenc}
-\usepackage{lmodern}
 
-% Ensure that generated PDF is machine readable/ATS parsable:
 \ifPDFTeX
+    \usepackage[utf8]{inputenc}
+    \usepackage[T1]{fontenc}
+    \usepackage{lmodern}
     \input{glyphtounicode}
     \pdfgentounicode=1
+\else
+    \usepackage{fontspec}
+    \IfFontExistsTF{Libertinus Serif}{
+        \setmainfont{Libertinus Serif}[
+            Ligatures=TeX,
+            Scale=0.98
+        ]
+    }{
+        \IfFontExistsTF{TeX Gyre Pagella}{
+            \setmainfont{TeX Gyre Pagella}[
+                Ligatures=TeX,
+                Scale=0.98
+            ]
+        }{
+            \IfFontExistsTF{Times New Roman}{
+                \setmainfont{Times New Roman}
+            }{
+                \setmainfont{Latin Modern Roman}
+            }
+        }
+    }
+\fi
+
+\newif\ifwithphoto
+\ifdefined\withphoto
+  \withphototrue
+\else
+  \withphotofalse
 \fi
 
 % Some settings:
@@ -50,24 +79,24 @@
 \setlength{\topskip}{0pt} 
 \setlength{\columnsep}{0cm} 
 
-\titleformat{\section}{\needspace{4\baselineskip}\bfseries\large}{}{0pt}{}[\vspace{1pt}\titlerule]
+\titleformat{\section}{\needspace{3\baselineskip}\bfseries\large}{}{0pt}{}[\vspace{1pt}\titlerule]
 
 \titlespacing{\section}{
     -1pt 
 }{
-    0.4cm 
+    0.28cm 
 }{
-    0.2cm
+    0.14cm
 } 
 
 \renewcommand\labelitemi{$\circ$} 
 \newenvironment{highlights}{
     \begin{itemize}[
-        topsep=0.15cm,
-        parsep=0.10cm,
+        topsep=0.08cm,
+        parsep=0.04cm,
         partopsep=0pt,
-        itemsep=0.10cm,
-        leftmargin=0.4cm + 10pt 
+        itemsep=0.05cm,
+        leftmargin=0.36cm + 10pt 
     ]
 }{
     \end{itemize}
@@ -76,25 +105,25 @@
 \setlist[itemize,2]{ 
     label=\textbullet, 
     leftmargin=1em,   
-    topsep=0.08cm,
+    topsep=0.05cm,
     partopsep=0pt,
-    parsep=0.05cm,
-    itemsep=0.05cm    
+    parsep=0.03cm,
+    itemsep=0.03cm    
 }
 \setlist[itemize,3]{ 
     label=\textendash,
     leftmargin=1em,
-    topsep=0.05cm,
+    topsep=0.04cm,
     partopsep=0pt,
-    parsep=0.05cm,
+    parsep=0.03cm,
     itemsep=0.02cm
 }
 
 \newenvironment{onecolentry}{
     \begin{adjustwidth}{
-        0.2cm 
+        0.12cm 
     }{
-        0.2cm
+        0.12cm
     }
 }{
     \end{adjustwidth}
@@ -113,7 +142,7 @@
 } 
 
 \newenvironment{header}{
-    \setlength{\topsep}{0pt}\par\kern\topsep\centering\linespread{1.1} 
+    \setlength{\topsep}{0pt}\par\kern\topsep\centering\linespread{1.05} 
 }{
     \par\kern\topsep
 } 
@@ -122,7 +151,6 @@
 \let\RealHref\href
 
 % Redefine \href for general use (if any in body, currently none)
-% This will color the text primaryColor
 \renewcommand{\href}[2]{\RealHref{#1}{\textcolor{primaryColor}{#2}}}
 
 % New command for header links, using black text
@@ -132,25 +160,46 @@
 \begin{document}
 \pagestyle{empty} 
 
+\ifwithphoto
+\noindent
+\begin{minipage}[c]{0.78\textwidth}
+    \textbf{\fontsize{23pt}{23pt}\selectfont NGUYEN LUONG HUU HUY}\\[0.08cm]
+    \normalsize\textit{Embedded Systems / Physical Design Engineer}\\[0.12cm]
+    \normalsize
+    Ho Chi Minh City, Viet Nam \\[0.04cm]
+    \mbox{\color{black}\footnotesize\faPhone*}\hspace*{0.13cm}0946790659
+    \kern 0.25cm 
+    \mbox{\color{black}\footnotesize\faEnvelope[regular]}\hspace*{0.13cm}\headerlink{mailto:nguyenhuuhuybe@gmail.com}{nguyenhuuhuybe@gmail.com} \\[0.08cm]
+    \mbox{\color{black}\footnotesize\faLinkedin}\hspace*{0.13cm}\headerlink{https://www.linkedin.com/in/huy-nguyen-luong-huu-huu}{linkedin.com/in/huy-nguyen-luong-huu-huu}
+    \kern 0.25cm 
+    \mbox{\color{black}\footnotesize\faGithub}\hspace*{0.13cm}\headerlink{https://github.com/HuyBK0408}{github.com/HuyBK0408}
+\end{minipage}%
+\hfill
+\begin{minipage}[c]{0.20\textwidth}
+    \raggedleft
+    \fboxsep=0pt\fboxrule=0.6pt\fcolorbox{gray!40}{white}{\includegraphics[width=2.5cm,height=3.33cm,keepaspectratio]{avatar.png}}
+\end{minipage}
+\else
 \begin{header}
     \textbf{\fontsize{24pt}{24pt}\selectfont NGUYEN LUONG HUU HUY}
 
-    \vspace{0.12cm}
+    \vspace{0.10cm}
     \normalsize\textit{Embedded Systems / Physical Design Engineer}
 
-    \vspace{0.15cm} 
+    \vspace{0.12cm} 
 
     \normalsize
-    Ho Chi Minh City, Viet Nam \\[0.05cm] % Small break after city
+    Ho Chi Minh City, Viet Nam \\[0.04cm]
     \mbox{\color{black}\footnotesize\faPhone*}\hspace*{0.13cm}0946790659
     \kern 0.3cm 
-    \mbox{\color{black}\footnotesize\faEnvelope[regular]}\hspace*{0.13cm}\headerlink{mailto:nguyenhuuhuybe@gmail.com}{nguyenhuuhuybe@gmail.com} \\[0.1cm] % Line break and small space
+    \mbox{\color{black}\footnotesize\faEnvelope[regular]}\hspace*{0.13cm}\headerlink{mailto:nguyenhuuhuybe@gmail.com}{nguyenhuuhuybe@gmail.com} \\[0.08cm]
     \mbox{\color{black}\footnotesize\faLinkedin}\hspace*{0.13cm}\headerlink{https://www.linkedin.com/in/huy-nguyen-luong-huu-huu}{linkedin.com/in/huy-nguyen-luong-huu-huu} %
     \kern 0.3cm 
     \mbox{\color{black}\footnotesize\faGithub}\hspace*{0.13cm}\headerlink{https://github.com/HuyBK0408}{github.com/HuyBK0408}
 \end{header}
+\fi
 
-\vspace{0.3cm}
+\vspace{0.20cm}
 
 \section{ABOUT ME}
 \begin{onecolentry}
@@ -169,7 +218,7 @@
         \item \textbf{Concepts:} FreeRTOS, DSP fundamentals, low-power design, JTAG/SWD debugging, floorplanning, placement, CTS, routing, physical verification
     \end{highlights}
 \end{onecolentry}
-\vspace{0.1cm}
+\vspace{0.08cm}
 
 \section{PROFESSIONAL EXPERIENCE}
 
@@ -182,7 +231,7 @@
         \item Improved problem-solving, teamwork, and technical communication skills through practical tasks and guidance from mentors.
     \end{highlights}
 \end{onecolentry}
-\vspace{0.2cm}
+\vspace{0.12cm}
 
 \begin{twocolentry}[DigiEx]{JUNE 2025 -- NOVEMBER 2025}
     \textit{Backend Developer}
@@ -197,7 +246,7 @@
         \item \textbf{Technologies:} Java, Spring Framework, MySQL, RESTful APIs, Git, Maven.
     \end{highlights}
 \end{onecolentry}
-\vspace{0.2cm}
+\vspace{0.12cm}
 
 \begin{twocolentry}[Skyechip]{JANUARY 2026 -- APRIL 2026}
     \textit{Physical Design (PD) Intern}
@@ -211,7 +260,7 @@
         \item Strengthened technical documentation, analytical thinking, and communication skills through internship training.
     \end{highlights}
 \end{onecolentry}
-\vspace{0.2cm}
+\vspace{0.12cm}
 
 \begin{twocolentry}[ICTC -- Physical Design (PD) Training Program]{MAY 2026 -- JULY 2026}
     \textit{Trainee}
@@ -223,6 +272,20 @@
         \item Practicing Linux commands, scripting, and industry-standard EDA tool workflows used in semiconductor backend design.
         \item Strengthening understanding of timing closure, congestion handling, power optimization, and design rule compliance.
         \item Developing hands-on knowledge of backend design methodology through training labs and implementation exercises.
+    \end{highlights}
+\end{onecolentry}
+\vspace{0.12cm}
+
+\begin{twocolentry}[Intel -- Manufacturing Technical Support]{AUGUST 2026 -- OCTOBER 2026}
+    \textit{Technical Support Staff}
+\end{twocolentry}
+\begin{onecolentry}
+    \begin{highlights}
+        \item Supported manufacturing operations by monitoring equipment, production processes, and operational data to ensure stable production.
+        \item Collected and analysed production data to support equipment adjustments and process optimisation.
+        \item Assisted in troubleshooting equipment issues and addressing production abnormalities to maintain product quality and process stability.
+        \item Followed manufacturing procedures, safety requirements, and technical instructions to ensure compliance with operational standards.
+        \item Collaborated with team members to support production activities, improve process efficiency, and maintain product quality.
     \end{highlights}
 \end{onecolentry}
 
@@ -238,7 +301,7 @@
         \item \textbf{Technologies:} Arduino Uno R3, ESP8266, MQTT, SHA-256 hashing, Git.
     \end{highlights}
 \end{onecolentry}
-\vspace{0.2cm}
+\vspace{0.12cm}
 
 \begin{twocolentry}[Automated Plant Watering System with IoT Monitoring]{SEPTEMBER 2023 -- DECEMBER 2023}
 \end{twocolentry}
@@ -264,11 +327,11 @@
 \section{EDUCATION}
 
 \begin{twocolentry}[HCMUT -- VNU-HCM]{AUGUST 2019 -- MAY 2025}
-    \textbf{Bachelor of Engineering in Computer Engineering} \textbar{} Ho Chi Minh City University of Technology \\[4pt]
+    \textbf{Bachelor of Engineering in Computer Engineering} \textbar{} Ho Chi Minh City University of Technology \\[3pt]
     \textbf{Relevant Coursework:} Data Structures \& Algorithms, Microprocessors \& Microcontrollers, Embedded Systems Design, Computer Architecture, Operating Systems, Circuit Theory, Digital Logic Design. \\
     \textbf{Key Projects:} 8-bit ALU design using VHDL; line-following robot (C programming) -- 2\textsuperscript{nd} place in university competition; IoT-based Smart Environmental Monitoring System; LPWAN Node for Agricultural Monitoring.
 \end{twocolentry}
-\vspace{0.2cm}
+\vspace{0.12cm}
 \begin{twocolentry}[LE KHIET GIFTED HIGH SCHOOL]{SEPTEMBER 2016 -- JUNE 2019}
     \textbf{Mathematics-specialized class}
 \end{twocolentry}
